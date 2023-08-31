@@ -1,0 +1,19 @@
+jobs:
+  deploy:
+    name: Upload to Amazon S3
+    runs-on: ubuntu-latest
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Configure AWS credentials from Test account
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        role-to-assume: arn:aws:iam::077792915129:role/OIDC-Chakresh-Github
+        aws-region: us-east-1
+    - name: Copy data from S3
+        run: |
+          aws s3 cp s3://source-bucket/path/to/source/file.txt /path/to/destination/
